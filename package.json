@@ -1,17 +1,17 @@
 {
-  "name": "socket-example",
+  "name": "draw-attention-server",
   "version": "1.0.0",
-  "description": "Demo socket.io project",
+  "description": "Draw attention sever",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Andrew Errity",
+  "author": "Adrian Fuentes",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^2.5.7",
-    "express": "^4.15.2",
-    "path": "^0.12.7",
-    "socket.io": "^1.7.3"
+    "ejs": "2.5.7",
+    "express": "4.15.2",
+    "path": "0.12.7",
+    "socket.io": "1.7.3"
   }
 }
