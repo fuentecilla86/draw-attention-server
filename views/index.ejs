@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Draw attention</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <h1>Draw attention</h1>
+    <p id="ledSwitchText">LED is <%= switchStateInitValueText %></p>
+
+    <div>
+      <label class="switch">
+        <input type="checkbox" id="ledSwitch" onclick="switchClicked()" <%= switchStateInitValue %>>
+        <span class="slider round"></span>
+      </label>
+    </div>
+
+    <p id="raspberrypiConnect">Raspberry pi is <%= raspberrypiState %></p>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect({reconnect: true});
+
+      function switchClicked(){
+        socket.emit('ledStatus', document.getElementById("ledSwitch").checked);
+      };
+
+      socket.on('switchUpdate', function(state) {
+        var stateTostring = state ? 'ON' : 'OFF';
+        document.getElementById("ledSwitchText").innerHTML = 'LED is ' + stateTostring;
+        document.getElementById("ledSwitch").checked = state;
+      });
+
+      socket.on('send-nickname', function(nickname) {
+        if (nickname === 'raspberrypi') {
+          document.getElementById("raspberrypiConnect").innerHTML = 'Raspberry pi is online';
+        }
+      });
+
+      socket.on('raspberrypi-disconnected', function() {
+        document.getElementById("raspberrypiConnect").innerHTML = 'Raspberry pi is offline';
+      });
+
+    </script>
+  </body>
+</html>
