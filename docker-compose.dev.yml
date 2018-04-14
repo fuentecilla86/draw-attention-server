@@ -1,0 +1,22 @@
+version: "2"
+
+services:
+  install:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: fuentecilla86/draw-attention-server:snapshot
+    hostname: draw-attention-server
+    command: ["npm", "install"]
+    volumes:
+      - ./:/usr/src/draw-attention-server
+
+  start:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: fuentecilla86/draw-attention-server:snapshot
+    hostname: draw-attention-server
+    command: ["npm", "run", "watch"]
+    volumes:
+      - ./:/usr/src/draw-attention-server

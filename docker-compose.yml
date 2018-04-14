@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+  start:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: fuentecilla86/draw-attention-server:latest
+    hostname: draw-attention-server
+    ports:
+      - 3001:3001

@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Bootstrap Toggle</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-toggle.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+  <main>
+    <div id="demos" class="container">
+      <h2 class="text-primary">Draw attention</h2>
+      <hr>
+      <br />
+
+      <h3>Raspberry pi is <span id="raspberrypi-connect" class="<%= raspberrypiColourState %>"><%= raspberrypiState %></span></h3>
+      <br />
+
+      <div id='div-toggle-led' style="display:<%= raspberrypiDisplayState %>;">
+        <div>
+          <label class="switch">
+            <input type="checkbox" id="led-switch" onclick="switchClicked()" <%= switchStateInitValue %>>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div>
+          <h3>LED is <span id="led-switch-text" class="<%= switchStateInitColour %>"><%= switchStateInitValueText %></span></h3>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect({reconnect: true});
+
+    function switchClicked(){
+      socket.emit('led-status', document.getElementById("led-switch").checked);
+    };
+
+    socket.on('switch-update', function(state) {
+      var stateToString = state ? 'ON' : 'OFF';
+      var stateToColour = state ? 'text-success' : 'text-danger';
+      document.getElementById("led-switch-text").innerHTML = stateToString;
+      document.getElementById("led-switch-text").className = stateToColour;
+      document.getElementById("led-switch").checked = state;
+    });
+
+    socket.on('send-nickname', function(nickname) {
+      if (nickname === 'raspberrypi') {
+        document.getElementById("raspberrypi-connect").innerHTML = 'online';
+        document.getElementById("raspberrypi-connect").className = 'text-success';
+        document.getElementById("div-toggle-led").style.display = "inline";
+      }
+    });
+
+    socket.on('raspberrypi-disconnected', function() {
+      document.getElementById("raspberrypi-connect").innerHTML = 'offline';
+      document.getElementById("raspberrypi-connect").className = 'text-danger';
+      document.getElementById("div-toggle-led").style.display = "none";
+    });
+  </script>
+  <script src="js/bootstrap-toggle.js"></script>
+</body>
+</html>
