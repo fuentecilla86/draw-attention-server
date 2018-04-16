@@ -60,6 +60,7 @@ io.on('connection', function(client) {
       client.nickname = nickname
       // emit to all sockets
       io.emit('send-nickname', 'raspberrypi');
+      io.emit('init-state-for-raspberry', switchState);
     }
   });
 
